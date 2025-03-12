@@ -31,7 +31,7 @@ const CategoryShowcase = () => {
   const productCounts = allProducts?.reduce((acc, product) => {
     acc[product.category] = (acc[product.category] || 0) + 1;
     return acc;
-  }, {});
+  }, {}) || {};
   
   return (
     <div className="space-y-20 py-8">
@@ -49,7 +49,7 @@ const CategoryShowcase = () => {
               >
                 View All
                 <span className="ml-1 text-sm text-muted-foreground">
-                  ({productCounts?.[category.id] || 0})
+                  ({productCounts[category.id] || 0})
                 </span>
               </Button>
             </Link>

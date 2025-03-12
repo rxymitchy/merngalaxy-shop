@@ -12,7 +12,7 @@ const handleResponse = async (response) => {
 };
 
 // Product APIs
-export const fetchProducts = async ({ category = '', sortBy = 'newest' } = {}) => {
+export const fetchProducts = async ({ category = '', limit = 0, sortBy = 'newest' } = {}) => {
   let url = `${API_URL}/products?`;
   
   if (category) {
@@ -24,16 +24,29 @@ export const fetchProducts = async ({ category = '', sortBy = 'newest' } = {}) =
   }
   
   // If API is not yet connected, return mock data
-  if (process.env.NODE_ENV === 'development') {
-    return mockProducts.filter(product => 
-      !category || product.category === category
-    ).sort((a, b) => {
+  if (process.env.NODE_ENV === 'development' || true) { // Force mock data for now
+    let filtered = mockProducts;
+    
+    // Apply category filter if provided
+    if (category) {
+      filtered = filtered.filter(product => product.category === category);
+    }
+    
+    // Apply sorting
+    filtered = [...filtered].sort((a, b) => {
       if (sortBy === 'price_low') return a.price - b.price;
       if (sortBy === 'price_high') return b.price - a.price;
       if (sortBy === 'name_asc') return a.name.localeCompare(b.name);
       // Default: newest
       return b._id.localeCompare(a._id);
     });
+    
+    // Apply limit if provided
+    if (limit > 0) {
+      filtered = filtered.slice(0, limit);
+    }
+    
+    return filtered;
   }
   
   const response = await fetch(url);

@@ -11,7 +11,7 @@ const ProductInventory = ({ category, limit = 4, showViewAll = true }) => {
   const [progress, setProgress] = useState(0);
   
   const { data: products, isLoading } = useQuery({
-    queryKey: ['products', category, 'limited'],
+    queryKey: ['products', category, limit],
     queryFn: () => fetchProducts({ category, limit }),
   });
   
@@ -51,12 +51,10 @@ const ProductInventory = ({ category, limit = 4, showViewAll = true }) => {
     return <div>No products available in this category.</div>;
   }
   
-  const displayProducts = products.slice(0, limit);
-  
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {displayProducts.map((product) => (
+        {products.map((product) => (
           <ProductCard key={product._id} product={product} />
         ))}
       </div>
