@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import { fetchProducts } from '../services/api';
 import ProductCard from '../components/ProductCard';
+import { Progress } from '@/components/ui/progress';
 import { FilterIcon, SlidersHorizontalIcon, XIcon } from 'lucide-react';
 
 const ProductsPage = () => {
@@ -19,6 +20,7 @@ const ProductsPage = () => {
   
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [loadingProgress, setLoadingProgress] = useState(10);
   
   useEffect(() => {
     if (products) {
@@ -30,6 +32,21 @@ const ProductsPage = () => {
       );
     }
   }, [products, priceRange]);
+  
+  // Simulate loading progress
+  useEffect(() => {
+    if (isLoading) {
+      const timer = setTimeout(() => {
+        setLoadingProgress((oldProgress) => {
+          const newProgress = Math.min(oldProgress + 15, 90);
+          return newProgress;
+        });
+      }, 200);
+      return () => clearTimeout(timer);
+    } else {
+      setLoadingProgress(100);
+    }
+  }, [isLoading, loadingProgress]);
   
   const handleCategoryChange = (newCategory) => {
     if (category === newCategory) {
@@ -73,9 +90,11 @@ const ProductsPage = () => {
   return (
     <div className="py-8">
       <div className="container">
-        <h1 className="text-3xl font-medium mb-8">
+        <h1 className="text-3xl font-medium mb-4">
           {category ? `${category.charAt(0).toUpperCase() + category.slice(1)} Products` : 'All Products'}
         </h1>
+        
+        {isLoading && <Progress value={loadingProgress} className="mb-8" />}
         
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Mobile filters button */}

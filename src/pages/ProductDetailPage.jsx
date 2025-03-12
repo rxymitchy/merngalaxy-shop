@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useCart } from '../context/CartContext';
 import { fetchProductById, fetchSimilarProducts } from '../services/api';
 import ProductCard from '../components/ProductCard';
+import { Progress } from '@/components/ui/progress';
 import { ChevronRightIcon, MinusIcon, PlusIcon, ShoppingBagIcon } from 'lucide-react';
 
 const ProductDetailPage = () => {
@@ -12,6 +13,7 @@ const ProductDetailPage = () => {
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [loadingProgress, setLoadingProgress] = useState(10);
   
   const { data: product, isLoading, error } = useQuery({
     queryKey: ['product', id],
@@ -29,6 +31,21 @@ const ProductDetailPage = () => {
     setQuantity(1);
     setSelectedImage(0);
   }, [id]);
+  
+  // Simulate loading progress
+  useEffect(() => {
+    if (isLoading) {
+      const timer = setTimeout(() => {
+        setLoadingProgress((oldProgress) => {
+          const newProgress = Math.min(oldProgress + 15, 90);
+          return newProgress;
+        });
+      }, 200);
+      return () => clearTimeout(timer);
+    } else {
+      setLoadingProgress(100);
+    }
+  }, [isLoading, loadingProgress]);
   
   const decreaseQuantity = () => {
     if (quantity > 1) {
@@ -50,6 +67,7 @@ const ProductDetailPage = () => {
     return (
       <div className="py-12">
         <div className="container">
+          <Progress value={loadingProgress} className="mb-8" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="animate-pulse bg-muted rounded-lg aspect-square"></div>
             <div className="space-y-4">
