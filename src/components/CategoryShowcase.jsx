@@ -21,8 +21,8 @@ const CategoryShowcase = () => {
   if (isLoading) {
     return (
       <div className="py-8">
-        <Progress value={45} className="w-full" />
-        <div className="text-center mt-4">Loading product categories...</div>
+        <Progress value={45} className="w-full h-2.5 bg-indigo-100" />
+        <div className="text-center mt-4 text-indigo-700 animate-pulse">Loading product categories...</div>
       </div>
     );
   }
@@ -34,16 +34,19 @@ const CategoryShowcase = () => {
   }, {});
   
   return (
-    <div className="space-y-20 py-12">
+    <div className="space-y-20 py-8">
       {categories.map(category => (
-        <section key={category.id} className="space-y-6">
+        <section key={category.id} className="space-y-8">
           <div className="flex justify-between items-end">
             <div>
-              <h2 className="text-3xl font-medium">{category.name}</h2>
+              <h2 className="text-3xl font-medium text-gray-800">{category.name}</h2>
               <p className="text-muted-foreground mt-2">{category.description}</p>
             </div>
             <Link to={`/products?category=${category.id}`}>
-              <Button variant="outline">
+              <Button 
+                variant="outline" 
+                className="border-indigo-300 text-indigo-700 hover:bg-indigo-100 transition-colors shadow-sm"
+              >
                 View All
                 <span className="ml-1 text-sm text-muted-foreground">
                   ({productCounts?.[category.id] || 0})
