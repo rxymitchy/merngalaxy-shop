@@ -1,4 +1,3 @@
-
 # Elegance - Premium E-commerce Store
 
 A modern, responsive e-commerce web application built with React and the MERN stack architecture. Features a premium shopping experience with elegant design, product catalog, shopping cart, and checkout functionality.
@@ -41,7 +40,7 @@ A modern, responsive e-commerce web application built with React and the MERN st
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/elegance-store.git
+   git clone https://github.com/rxymitchy/merngalaxy-shop.git
    cd elegance-store
    ```
 
